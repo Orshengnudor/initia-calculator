@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>INITIA Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #070b29;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background-color: #1e1e1e;
+      padding: 20px 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px 0;
+    }
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+      border: 1px solid #444;
+    }
+    th {
+      background-color: #333;
+    }
+    td {
+      background-color: #222;
+    }
+    img.logo {
+      width: 40px;
+      height: 40px;
+      float: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="https://initia.xyz/logo.svg" alt="Initia Logo" class="logo" />
+    <h1>INITIA Calculator</h1>
+    <label for="tokens">How many $INIT tokens do you have?</label><br />
+    <input type="number" id="tokens" placeholder="Enter token amount" /><br />
+    <button onclick="calculate()">Calculate</button>
+    <table id="resultTable">
+      <thead>
+        <tr>
+          <th>Market Cap</th>
+          <th>Your Token Worth</th>
+          <th>Token Price</th>
+          <th>FDV</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    function calculate() {
+      const tokenAmount = parseFloat(document.getElementById('tokens').value);
+      const tbody = document.querySelector("#resultTable tbody");
+      tbody.innerHTML = "";
+
+      const totalSupply = 1_000_000_000;
+      const startPrice = 0.4;
+      const increment = 0.3;
+      const endPrice = 6.0;
+
+      for (let price = startPrice; price <= endPrice + 0.001; price += increment) {
+        const marketCap = price * totalSupply;
+        const userWorth = tokenAmount * price;
+        const fdv = marketCap;
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>$${(marketCap / 1_000_000).toFixed(2)}M</td>
+          <td>$${userWorth.toFixed(2)}</td>
+          <td>$${price.toFixed(6)}</td>
+          <td>$${(fdv / 1_000_000_000).toFixed(2)}B</td>
+        `;
+        tbody.appendChild(row);
+      }
+    }
+  </script>
+</body>
+</html>
